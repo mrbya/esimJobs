@@ -11,6 +11,19 @@ Supported platforms:
 * ESP-IDF
 * mbedOS (soon)
 
+### Consume
+
+#### ESP-IDF consume with add subdirectory
+
+```
+set(ESIM_PLATFORM "ESIM_PLATFORM_ESP_IDF")
+
+add_subdirectory(esimJobs)
+target_link_libraries(${COMPONENT_LIB} PUBLIC esimJobs)
+```
+
+### Building
+
 example build for esp-idf
 
 ```
