@@ -39,6 +39,7 @@ typedef struct esim_cmd_argument{
 
 typedef struct esim_command{
     char name[ESIM_CMD_ID_BUFFER_LEN];
+    uint8_t argLen;
     esim_arg_t* args;
 }esim_cmd_t;
 
