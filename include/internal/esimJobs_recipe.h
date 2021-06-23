@@ -10,5 +10,7 @@ esim_err_t getIntArg(esim_arg_t* arg, char* buffer);
 esim_err_t getFloatArg(esim_arg_t* arg, char* buffer);
 esim_err_t getBoolArg(esim_arg_t* arg, char* buffer);
 esim_err_t getTimeArg(esim_arg_t* arg, char* buffer);
+void freeCmdArgs(esim_cmd_t* cmd);
+void freeArg(esim_arg_t* arg);
 
 #endif//ESIMJOBS_RECIPE_H_

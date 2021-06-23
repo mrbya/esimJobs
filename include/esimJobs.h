@@ -7,7 +7,7 @@ extern "C" {
 
 #include "esimJobs_definitions.h"
 
-esim_err_t parseJob(esim_job_t* job, char* data);
+esim_err_t parseJob(esim_job_t* job, const char* data);
 void esimFree(esim_job_t* job);
 
 #ifdef __cplusplus
