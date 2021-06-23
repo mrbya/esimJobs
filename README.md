@@ -13,7 +13,7 @@ Supported platforms:
 
 ### Consume
 
-ESP-IDF consume with add subdirectory
+#### ESP-IDF consume with add subdirectory
 
 ```
 set(ESIM_PLATFORM "ESIM_PLATFORM_ESP_IDF")
