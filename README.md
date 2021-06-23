@@ -9,7 +9,7 @@ EsimJobs library uses pure C and can be built using CMake and a cmd line build t
 Supported platforms:
 
 * ESP-IDF
-* mbedOS (soon)
+* mbedOS
 
 ### Consume
 
@@ -22,7 +22,7 @@ add_subdirectory(esimJobs)
 target_link_libraries(${COMPONENT_LIB} PUBLIC esimJobs)
 ```
 
-### mbedOS consume with add subdirectory
+#### mbedOS consume with add subdirectory
 
 ```
 set(ESIM_PLATFORM "ESIM_PLATFORM_MBED_OS")
