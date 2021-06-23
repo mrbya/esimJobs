@@ -11,7 +11,9 @@ esim_err_t parseRecipe(esim_recipe_t* recipe, cJSON* data) {
     char* recipeId = cJSON_GetObjectItem(data, ESIM_RECIPE_ID_KEY) -> valuestring;
     if (recipeId != NULL) {
         memcpy(recipe -> recipeId, recipeId, strlen(recipeId));
-        //cJSON_free(recipeId);
+
+        //recipeId key buffer cleanup
+        free(recipeId);
     }//if (recipeId != NULL)
 
     //get cycles count
@@ -48,8 +50,11 @@ esim_err_t parseScript(esim_recipe_t* recipe, cJSON* script) {
 
         //get command key
         char* cmdName = cJSON_GetObjectItem(cmd, ESIM_CMD_KEY) -> valuestring;
+        memset(command.name, 0, sizeof(command.name));
         memcpy(command.name, cmdName, strlen(cmdName));
-        //if (cmdName != NULL) cJSON_free(cmdName);
+
+        //cmd key buffer cleanup
+        if (cmdName != NULL) free(cmdName);
 
         //get command arguments
         cJSON* args = cJSON_GetObjectItem(cmd, ESIM_ARG_KEY);
@@ -98,8 +103,8 @@ esim_err_t parseScript(esim_recipe_t* recipe, cJSON* script) {
                     break;
             }//switch (argument.type)
 
-            //cleanup
-            //if (valBuffer != NULL) cJSON_free(valBuffer);
+            //value buffer cleanup
+            if (valBuffer != NULL) free(valBuffer);
 
             //save parsed argument
             command.args[j] = argument;
@@ -116,10 +121,12 @@ esim_err_t getStringArg(esim_arg_t* arg, char* buffer) {
     //check input arg
     if (buffer == NULL) return ESIM_INVALID_ARG;
     
-    //get string value
-    char stringBuffer[30];
-    memcpy(stringBuffer, buffer, strlen(buffer));
-    arg -> value = &stringBuffer;
+    if ((arg -> value = platform_malloc(sizeof(char) * strlen(buffer))) == NULL) {
+        return ESIM_MALLOC_FAIL;
+    }//if (arg -> value...
+
+    //save arg value
+    memcpy(arg -> value, buffer, strlen(buffer));
 
     return ESIM_OK;
 }//getStringArg
@@ -128,10 +135,17 @@ esim_err_t getIntArg(esim_arg_t* arg, char* buffer) {
     //check input arg
     if (buffer == NULL) return ESIM_INVALID_ARG;
 
+    //allocate space for arg value
+    if ((arg -> value = platform_malloc(sizeof(int))) == NULL) {
+        return ESIM_MALLOC_FAIL;
+    }//if (arg -> value...
+
     //get int value
     int intbuffer;
     sscanf(buffer, "%d", &intbuffer);
-    arg -> value = &intbuffer;
+
+    //save arg value
+    memcpy(arg -> value, &intbuffer, sizeof(int));
 
     return ESIM_OK;
 }//getIntArg
@@ -140,10 +154,17 @@ esim_err_t getFloatArg(esim_arg_t* arg, char* buffer) {
     //check input arg
     if (buffer == NULL) return ESIM_INVALID_ARG;
 
+    //allocate space for arg value
+    if ((arg -> value = platform_malloc(sizeof(float))) == NULL) {
+        return ESIM_MALLOC_FAIL;
+    }//if (arg -> value...
+
     //get float value
     float floatbuffer;
     sscanf(buffer, "%f", &floatbuffer);
-    arg -> value = &floatbuffer;
+
+    //save arg value
+    memcpy(arg -> value, &floatbuffer, sizeof(float));
 
     return ESIM_OK;
 }//getFloatArg
@@ -152,10 +173,16 @@ esim_err_t getBoolArg(esim_arg_t* arg, char* buffer) {
     //check input arg
     if (buffer == NULL) return ESIM_INVALID_ARG;
 
+    if ((arg -> value = platform_malloc(sizeof(bool))) == NULL) {
+        return ESIM_MALLOC_FAIL;
+    }//if (arg -> value...
+
     //get bool value
     bool boolBuffer = false;
     if (strcmp("true", buffer) == 0) boolBuffer = true;
-    arg -> value = &boolBuffer;
+    
+    //save arg value
+    memcpy(arg -> value, &boolBuffer, sizeof(bool));
 
     return ESIM_OK;
 }//getBoolArg
@@ -164,10 +191,30 @@ esim_err_t getTimeArg(esim_arg_t* arg, char* buffer) {
     //check input arg
     if (buffer == NULL) return ESIM_INVALID_ARG;
 
+    if ((arg -> value = platform_malloc(sizeof(unsigned long))) == NULL) {
+        return ESIM_MALLOC_FAIL;
+    }//if (arg -> value..
+
     //get time value aka unsigned long timestamp
     unsigned long timeBuffer;
     sscanf(buffer, "%ld", &timeBuffer);
-    arg -> value = &timeBuffer;
+    
+    //save arg value
+    memcpy(arg -> value, &timeBuffer, sizeof(unsigned long));
 
     return ESIM_OK;
 }//getTimeArg
+
+void freeCmdArgs(esim_cmd_t* cmd) {
+    //cleanup command argument values
+    for (int i = 0; i < cmd -> argLen; i++) {
+        freeArg(&cmd -> args[i]);
+    }//for(uint8_t i...
+}//freeCmd
+
+void freeArg(esim_arg_t* arg) {
+    //cleanup argument value
+    if (arg -> value != NULL) {
+        free(arg -> value);
+    }//if (arg -> value != NULL)
+}//freeArg

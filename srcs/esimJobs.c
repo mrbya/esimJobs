@@ -2,7 +2,7 @@
 #include "esimJobs_recipe.h"
 #include "esimJobs_platform.h"
 
-esim_err_t parseJob(esim_job_t* job, char* data) {
+esim_err_t parseJob(esim_job_t* job, const char* data) {
     //check input arg
     if (data == NULL) {
         return ESIM_INVALID_ARG;
@@ -18,7 +18,9 @@ esim_err_t parseJob(esim_job_t* job, char* data) {
     char* jobId = cJSON_GetObjectItem(cData, ESIM_JOB_ID_KEY) -> valuestring;
     if (jobId != NULL) {
         memcpy(job -> jobId, jobId, strlen(jobId));
-        //cJSON_free(jobId);
+
+        //jobId key buffer cleanup
+        free(jobId);
     }//if (jobId != NULL)
 
     //parse recipe
@@ -28,14 +30,20 @@ esim_err_t parseJob(esim_job_t* job, char* data) {
     if (cData == NULL) {
         return ESIM_PARSE_FAIL;
     } else {
-        //cJSON_Delete(cData);
+        cJSON_Delete(cData);
     }//if (cData == NULL)
 
     return ret;
 }//parseJob
 
 void esimFree(esim_job_t* job) {
-    //esim job cleanup
+    //cleanup command argument values
+    for (uint8_t i = 0; i < job -> recipe.jobLen; i++) {
+        freeCmdArgs(&job -> recipe.cmds[i]);
+    }//for (uint8_t i...
+
+    //cleanup command arguments
     platform_free(job -> recipe.cmds -> args);
+    //cleanup commands
     platform_free(job -> recipe.cmds);
 }//esimFree
