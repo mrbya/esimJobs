@@ -3,8 +3,6 @@
 
 #include <stdlib.h>
 
-#include "esimJobs_definitions.h"
-
 void* platform_malloc(size_t size);
 void platform_free(void* pointer);
 void platform_log_info(char* format, ...);
