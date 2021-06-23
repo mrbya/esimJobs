@@ -16,6 +16,8 @@ Supported platforms:
 #### ESP-IDF consume with add subdirectory
 
 ```
+# inside main component CMakeLists.txt
+
 set(ESIM_PLATFORM "ESIM_PLATFORM_ESP_IDF")
 
 add_subdirectory(esimJobs)
@@ -25,6 +27,8 @@ target_link_libraries(${COMPONENT_LIB} PUBLIC esimJobs)
 #### mbedOS consume with add subdirectory
 
 ```
+# inside topmost CMakeList.txt
+
 set(ESIM_PLATFORM "ESIM_PLATFORM_MBED_OS")
 
 add_subdirectory(esimJobs)
