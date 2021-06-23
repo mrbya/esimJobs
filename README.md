@@ -33,7 +33,7 @@ target_link_libraries(${APP_TARGET} esimJobs)
 
 ### Building
 
-example build with esp-idf
+#### example build with esp-idf
 
 ```
 mkdir build
@@ -42,7 +42,7 @@ cmake -DESIM_PLATDORM:STRING=ESIM_PLATFORM_ESP_IDF .. -G Ninja
 ninja
 ```
 
-example build with mbed os
+#### example build with mbed os
 
 ```
 mbed-tools configure -m NUCLEO_F767ZI -t GCC_ARM
