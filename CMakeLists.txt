@@ -45,7 +45,7 @@ target_include_directories(esimJobs PRIVATE ./include)
 target_include_directories(esimJobs PRIVATE ./include/internal)
 target_include_directories(esimJobs PRIVATE ./platforms/esp-idf)
 target_include_directories(esimJobs PRIVATE ./platforms/mbedos)
-target_include_directories(esimJobs PRIVATE ./submodule/cJSON)
+target_include_directories(esimJobs PUBLIC ./submodule/cJSON)
 
 #####################################################################################
 # PLATFORM SPECIFIC LINKING INSTRUCTIONS
