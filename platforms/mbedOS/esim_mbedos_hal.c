@@ -1,9 +1,8 @@
 #include <stdlib.h>
 #include <stdarg.h>
+#include <stdio.h>
 
 #include "esim_mbedos_hal.h"
-
-#include "mbed.h"
 
 void* platform_malloc(size_t size){
     return malloc(size);
