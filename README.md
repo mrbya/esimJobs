@@ -28,12 +28,12 @@ target_link_libraries(${COMPONENT_LIB} PUBLIC esimJobs)
 set(ESIM_PLATFORM "ESIM_PLATFORM_MBED_OS")
 
 add_subdirectory(esimJobs)
-target_link_libraries(${APP_TARGET} PUBLIC esimJobs)
+target_link_libraries(${APP_TARGET} esimJobs)
 ```
 
 ### Building
 
-example build for esp-idf
+example build with esp-idf
 
 ```
 mkdir build
@@ -41,3 +41,12 @@ cd build
 cmake -DESIM_PLATDORM:STRING=ESIM_PLATFORM_ESP_IDF .. -G Ninja
 ninja
 ```
+
+example build with mbed os
+
+```
+mbed-tools configure -m NUCLEO_F767ZI -t GCC_ARM
+cmake -S . -B cmake_build/NUCLEO_F767ZI/develop/GCC_ARM -GNinja
+cmake
+```
+
