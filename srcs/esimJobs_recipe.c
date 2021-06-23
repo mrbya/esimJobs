@@ -55,13 +55,13 @@ esim_err_t parseScript(esim_recipe_t* recipe, cJSON* script) {
         cJSON* args = cJSON_GetObjectItem(cmd, ESIM_ARG_KEY);
 
         //allocate space for arguments
-        size_t alen = cJSON_GetArraySize(args);
-        if ((command.args = (esim_arg_t*)platform_malloc(alen * sizeof(esim_arg_t))) == NULL) {
+        command.argLen = cJSON_GetArraySize(args);
+        if ((command.args = (esim_arg_t*)platform_malloc(command.argLen * sizeof(esim_arg_t))) == NULL) {
             return ESIM_MALLOC_FAIL;
         }//if ((command.args = (esim_arg_t))...
 
         //parase arguments
-        for (uint8_t j = 0; j < alen; j++) {
+        for (uint8_t j = 0; j < command.argLen; j++) {
             esim_arg_t argument;
             cJSON* arg = cJSON_GetArrayItem(args, j);
 
