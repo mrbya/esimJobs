@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
-project(esimJobs VERSION 0.9.0)
+project(esimJobs VERSION 0.9.2)
 
 #####################################################################################
 # COMPILATION OPTIONS
