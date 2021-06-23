@@ -14,6 +14,7 @@ option(ESIM_LOGGING "Compile esim platform logging" ON)
 
 set(commonSources 
 srcs/esimJobs.c 
+srcs/esimJobs_recipe.c 
 submodule/cJSON/cJSON.c)
 
 #####################################################################################
@@ -41,6 +42,7 @@ set(CMAKE_C_STANDARD 11)
 
 target_include_directories(esimJobs PUBLIC .)
 target_include_directories(esimJobs PRIVATE ./include)
+target_include_directories(esimJobs PRIVATE ./include/internal)
 target_include_directories(esimJobs PRIVATE ./platforms/esp-idf)
 target_include_directories(esimJobs PRIVATE ./platforms/mbedos)
 target_include_directories(esimJobs PRIVATE ./submodule/cJSON)
@@ -50,8 +52,6 @@ target_include_directories(esimJobs PRIVATE ./submodule/cJSON)
 #####################################################################################
 if(${ESIM_PLATFORM} MATCHES "CFFS_PLATFORM_ESP32")
     target_link_libraries(cffs idf::log)
-    target_link_libraries(cffs idf::spi_flash)
-    target_link_libraries(cffs idf::wear_levelling)
 endif()
 
 ##MBED OS##
@@ -61,10 +61,8 @@ set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
 #####################################################################################
-# COMPILE DEFINITIONS
+# ADDITIONAL COMPILE DEFINITIONS
 #####################################################################################
-add_compile_definitions(${CFFS_PLATFORM})
-
 if(ESIM_LOGGING)
 message(STATUS "ESIM logging is ON")
 add_compile_definitions(ESIM_LOGGING)

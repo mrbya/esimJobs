@@ -3,21 +3,17 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+
+#include "cJSON.h"
+
+#define ESIM_JOB_ID_KEY     "EsimJobId"
 
 #define ESIM_CMD_ID_BUFFER_LEN  30
 
 #define ESIM_JOB_ID_BUFFER_LEN  40
 #define ESIM_REC_ID_BUFFER_LEN  40
-
-#define ESIM_JOB_ID_KEY     "EsimJobId"
-#define ESIM_RECIPE_ID_KEY  "RecipeId"
-#define ESIM_CYCLES_CNT_KEY "CyclesCount"
-#define ESIM_INFINITE_KEY   "IsInfinite"
-#define ESIM_SCRIPT_KEY     "script"
-#define ESIM_CMD_KEY        "EsimCommandKey"
-#define ESIM_ARG_KEY        "Values"
-#define ESIM_ARG_TYPE_KEY   "ArgumentType"
-#define ESIM_ARG_VAL_KEY    "Value"
 
 typedef enum esim_error{
     ESIM_OK,
