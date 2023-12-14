@@ -51,6 +51,6 @@ ninja
 ```
 mbed-tools configure -m NUCLEO_F767ZI -t GCC_ARM
 cmake -S . -B cmake_build/NUCLEO_F767ZI/develop/GCC_ARM -GNinja
-cmake
+ninja
 ```
 

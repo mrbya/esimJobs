@@ -12,12 +12,14 @@ esim_err_t parseJob(esim_job_t* job, const char* data) {
     cJSON* cData = cJSON_Parse(data);
 
     //check conversion result
-    if (cData == NULL) return ESIM_PARSE_FAIL;
+    if (cData == NULL) {
+        return ESIM_PARSE_FAIL;
+    }
 
     //get jobId
     char* jobId = cJSON_GetObjectItem(cData, ESIM_JOB_ID_KEY) -> valuestring;
     if (jobId != NULL) {
-        memcpy(job -> jobId, jobId, strlen(jobId));
+        memcpy(job -> jobId, jobId, strlen(jobId) & ESIM_JOB_ID_BUFFLEN_MASK);
 
         //jobId key buffer cleanup
         free(jobId);

@@ -15,7 +15,7 @@ void platform_free(void* pointer){
 }
 
 void platform_log_info(char* format, ...){
-    #ifdef ESIM_LOGGING
+    #ifdef ESIM_LOGGING_LEVEL_2
     va_list args;
 
     printf("ESIM INFO: ");
@@ -29,7 +29,7 @@ void platform_log_info(char* format, ...){
 }
 
 void platform_log_error(char* format, ...){
-    #ifdef ESIM_LOGGING
+    #ifdef ESIM_LOGGING_LEVEL_1
     va_list args;
 
     printf("ESIM ERROR: ");

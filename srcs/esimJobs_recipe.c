@@ -10,7 +10,7 @@ esim_err_t parseRecipe(esim_recipe_t* recipe, cJSON* data) {
     //get recipe id
     char* recipeId = cJSON_GetObjectItem(data, ESIM_RECIPE_ID_KEY) -> valuestring;
     if (recipeId != NULL) {
-        memcpy(recipe -> recipeId, recipeId, strlen(recipeId));
+        memcpy(recipe -> recipeId, recipeId, strlen(recipeId) & ESIM_REC_ID_BUFFLEN_MASK);
 
         //recipeId key buffer cleanup
         free(recipeId);
@@ -34,7 +34,7 @@ esim_err_t parseScript(esim_recipe_t* recipe, cJSON* script) {
     //check input arg
     if (script == NULL) {
         return ESIM_INVALID_ARG;
-    }//if (data == NULL)
+    }//if (script == NULL)
 
     //get recipe length and allocate space for commands
     recipe -> jobLen = cJSON_GetArraySize(script);
@@ -50,14 +50,22 @@ esim_err_t parseScript(esim_recipe_t* recipe, cJSON* script) {
 
         //get command key
         char* cmdName = cJSON_GetObjectItem(cmd, ESIM_CMD_KEY) -> valuestring;
-        memset(command.name, 0, sizeof(command.name));
-        memcpy(command.name, cmdName, strlen(cmdName));
+
+        if (cmdName == NULL) return ESIM_PARSE_FAIL;
+
+        memset(command.name, 0, ESIM_CMD_ID_BUFFER_LEN);
+        memcpy(command.name, cmdName, strlen(cmdName) & ESIM_CMD_ID_BUFFLEN_MASK);
 
         //cmd key buffer cleanup
-        if (cmdName != NULL) free(cmdName);
+        free(cmdName);
 
         //get command arguments
         cJSON* args = cJSON_GetObjectItem(cmd, ESIM_ARG_KEY);
+
+        //check args JSON
+        if (args == NULL) {
+            return ESIM_PARSE_FAIL;
+        }//if (args == NULL)
 
         //allocate space for arguments
         command.argLen = cJSON_GetArraySize(args);
@@ -70,11 +78,20 @@ esim_err_t parseScript(esim_recipe_t* recipe, cJSON* script) {
             esim_arg_t argument;
             cJSON* arg = cJSON_GetArrayItem(args, j);
 
+            //check arg JSON
+            if (arg == NULL) {
+                return ESIM_PARSE_FAIL;
+            }//if (arg == NULL)
+
             //get argument type
             argument.type = (esim_arg_type_t)cJSON_GetObjectItem(arg, ESIM_ARG_TYPE_KEY) -> valueint;
 
             //get argument value
             char* valBuffer = cJSON_GetObjectItem(arg, ESIM_ARG_VAL_KEY) -> valuestring;
+
+            if (valBuffer == NULL) {
+                return ESIM_PARSE_FAIL;
+            }//if (valBuffer == NULL)
 
             //parse argument value
             switch (argument.type) {
@@ -104,15 +121,21 @@ esim_err_t parseScript(esim_recipe_t* recipe, cJSON* script) {
             }//switch (argument.type)
 
             //value buffer cleanup
-            if (valBuffer != NULL) free(valBuffer);
+            free(valBuffer);
 
             //save parsed argument
             command.args[j] = argument;
+
+            //arg JSON cleanup
+            cJSON_delete(arg);
         }//for (uint8_t j = 0; j < alen; j++)
 
         //save parsed command
         recipe -> cmds[i] = command;
     }//for (int i = 0; i < recipe->jobLen; i++)
+
+    //args JSON cleanup
+    cJSON_delete(args);
 
     return ret;
 }//parseScript

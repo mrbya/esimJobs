@@ -19,10 +19,14 @@
 
 #define ESIM_JOB_ID_KEY     "EsimJobId"
 
-#define ESIM_CMD_ID_BUFFER_LEN  30
+#define ESIM_JOB_ID_BUFFER_LEN      64
+#define ESIM_JOB_ID_BUFFLEN_MASK    63
 
-#define ESIM_JOB_ID_BUFFER_LEN  40
-#define ESIM_REC_ID_BUFFER_LEN  40
+#define ESIM_REC_ID_BUFFER_LEN      64
+#define ESIM_REC_ID_BUFFLEN_MASK    63
+
+#define ESIM_CMD_ID_BUFFER_LEN      32
+#define ESIM_CMD_ID_BUFFLEN_MASK    31
 
 /**
  * @brief ESIM Job return coddes
@@ -41,7 +45,7 @@ typedef enum esim_error{
  */
 typedef enum esim_arg_type{
     ESIM_ARG_TEXT,          /**< String argument value. */
-    ESIM_ARG_INT,           /**< Integet argument value. */
+    ESIM_ARG_INT,           /**< Integer argument value. */
     ESIM_ARG_FLOAT,         /**< Float argument value. */
     ESIM_ARG_BOOL,          /**< Boolean argument value. */
     ESIM_ARG_TIME           /**< Time argument value aka timestamp i nthe form of an unsigned long. */
@@ -65,7 +69,7 @@ typedef struct esim_command{
 }esim_cmd_t;
 
 /**
- * @brief Structure to hold ESIM Job recipe aka a sequence of commands
+ * @brief Structure to hold a sequence of commands aka ESIM Job recipe 
  */
 typedef struct esim_recipe{
     char recipeId[ESIM_REC_ID_BUFFER_LEN];  /**< Recipe ID. */

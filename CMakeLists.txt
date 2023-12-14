@@ -63,7 +63,13 @@ include(CPack)
 #####################################################################################
 # ADDITIONAL COMPILE DEFINITIONS
 #####################################################################################
-if(ESIM_LOGGING)
-message(STATUS "ESIM logging is ON")
-add_compile_definitions(ESIM_LOGGING)
+if(${ESIM_LOGGING} MATCHES 2)
+    message(STATUS "ESIM logging: LEVEL 2")
+    add_compile_definitions(ESIM_LOGGING_LEVEL_2)
+    add_compile_definitions(ESIM_LOGGING_LEVEL_1)
+elseif(${ESIM_LOGGING} MATCHES 1)
+    message(STATUS "ESIM logging: LEVEL 1")
+    add_compile_definitions(ESIM_LOGGING_LEVEL_1)
+else
+    message(STATUS "ESIM logging: OFF")
 endif()
